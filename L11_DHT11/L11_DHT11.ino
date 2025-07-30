@@ -94,11 +94,6 @@ void displayError()
 {
   disp.display(3,14);//display "E"
 }
-
-if (H<10||T<10)
-{
-  cout<<"LOW HUMIDITY value\n";
-  void blink(int led,int msdelay);
 void setup()
 {
   pinMode(LED_RED,OUTPUT);
@@ -106,24 +101,27 @@ void setup()
   pinMode(LED_BLUE,OUTPUT);
   pinMode(LED_YELLOW,OUTPUT);
 }
-
-voidloop()
+if (H<10||T<10)
 {
-  blink(LED_RED,)
-}
-  delay(1500);
+  cout<<"LOW HUMIDITY value\n";
+  void blink(int led,int msdelay);
+
   digitalWrite(LED_GREEN, LOW);
-  digitalWrite(LED_YELLOW, HIGH);
-  delay(1500);
   digitalWrite(LED_YELLOW, LOW);
-  digitalWrite(LED_RED, HIGH);
-  for (int i = 0; i < ; i++){buz.playTone(392, 100);
+  digitalWrite(LED_RED,HIGH);
+  digitalWrite(LED_BLUE,LOW);
+	
+  for (int i = 0; i < ; i++)
+  {buz.playTone(392, 100);
   delay(100);
   }
-  }
-  else
-  {digitalWrite(LED_GREEN, );
-  digitalWrite(LED_YELLOW, );
-  digitalWrite(LED_RED, );
-  }
+}
+else
+{ 
+  cout<<"HIGH HUMIDITY";	
+  digitalWrite(LED_GREEN,HIGH );
+  digitalWrite(LED_YELLOW,LOW );
+  digitalWrite(LED_RED,LOW );
+  digitalWrite(LED_BLUE,LOW);
+  return 0;
 }
