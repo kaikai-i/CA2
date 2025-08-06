@@ -29,6 +29,10 @@ void setup() {
 	disp.init();  
 	dht.begin();
   Serial.begin(9600);
+  pinMode(LED_RED,OUTPUT);
+  pinMode(LED_GREEN,OUTPUT);
+  pinMode(LED_BLUE,OUTPUT);
+  pinMode(LED_YELLOW,OUTPUT);
 }
 
 void loop() {
@@ -49,7 +53,7 @@ void loop() {
     Serial.print(t);
     Serial.print(",");
     Serial.println(h);
-    delay(2000);
+    delay(1000);
   }
 }
 /************************************************* *********************/
@@ -85,17 +89,18 @@ void displayHumidity(int8_t humi)
   temp[3] = 18;	          //index of 'H' for celsius degree symbol.
   disp.display(temp);
 
-  if (humi>40)
+  if (humi>70)
 {
   Serial.println("LOW HUMIDITY value");
   void blink(int led,int msdelay);
 
-  digitalWrite(LED_RED, LOW);
+  digitalWrite(LED_RED, HIGH);
   digitalWrite(LED_GREEN, LOW);
-  digitalWrite(LED_BLUE,HIGH);
+  digitalWrite(LED_BLUE,LOW);
   digitalWrite(LED_YELLOW,LOW);
+  Serial.println("Password hint : What is my gpa?");
 	
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 15; i++)
   {  buz.playTone(392, 100);
      delay(100);
   }
@@ -103,8 +108,8 @@ void displayHumidity(int8_t humi)
 else
 { 
   Serial.println("HIGH HUMIDITY");	
-  digitalWrite(LED_RED,HIGH );
-  digitalWrite(LED_GREEN,LOW );
+  digitalWrite(LED_RED,LOW );
+  digitalWrite(LED_GREEN,HIGH );
   digitalWrite(LED_BLUE,LOW );
   digitalWrite(LED_YELLOW,LOW);
   return 0;
@@ -114,12 +119,4 @@ else
 void displayError()
 {
   disp.display(3,14);//display "E"
-}
-
-void setUp()
-{
-  pinMode(LED_RED,OUTPUT);
-  pinMode(LED_GREEN,OUTPUT);
-  pinMode(LED_BLUE,OUTPUT);
-  pinMode(LED_YELLOW,OUTPUT);
 }
