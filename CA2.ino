@@ -4,28 +4,44 @@
 
 #include <Wire.h>
 
+#include "RichShieldDHT.h"
 #include "RichShieldTM1637.h"
-#include "RichShieldNTC.h"
-
-#define NTC_PIN A1 //SIG pin of NTC module connect to A1 of IO Shield, that is pin A1 of OPEN-SMART UNO R3
-NTC temper(NTC_PIN);  
-
 #define CLK 10//CLK of the TM1637 IC connect to D10 of OPEN-SMART UNO R3
 #define DIO 11//DIO of the TM1637 IC connect to D11 of OPEN-SMART UNO R3
+#define LED_RED 4
+#define LED_GREEN 5
+#define LED_BLUE 6
+#define LED_YELLOW 7
 TM1637 disp(CLK,DIO);
+double H,T;
 
-void setup()
-{
-  disp.init();//The initialization of the display
-  delay(1000);//
+DHT dht;
+
+void setup() {
+	disp.init();  
+	dht.begin();
+  Serial.begin(9600);
 }
 
-void loop()
-{
-  float celsius;
-  celsius = temper.getTemperature();//get temperature
-  displayTemperature((int8_t)celsius);//
-  delay(1000);//delay 1000ms
+void loop() {
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  // check if returns are valid, if they are NaN (not a number) then something went wrong!
+  if (isnan(t) || isnan(h)) {
+    displayError();
+  } 
+  else{
+    displayTemperature((int8_t)t);//
+    delay(1000);
+    displayHumidity((int8_t)h);//
+    Serial.print(t);
+    Serial.print(",");
+    Serial.println(h);
+    delay(2000);
+  }
 }
 /************************************************* *********************/
 /* Function: Display temperature on 4-digit digital tube */
@@ -49,3 +65,50 @@ void displayTemperature(int8_t temperature)
 	disp.display(temp);
 }
 
+void displayHumidity(int8_t humi)
+{
+  int8_t temp[4];
+  if(humi < 100)temp[0] = INDEX_BLANK;
+  else temp[0] = humi/100;
+  humi %= 100;
+  temp[1] = humi / 10;
+  temp[2] = humi % 10;
+  temp[3] = 18;	          //index of 'H' for celsius degree symbol.
+  disp.display(temp);
+}
+
+void displayError()
+{
+  disp.display(3,14);//display "E"
+}
+void setup()
+{
+  pinMode(LED_RED,OUTPUT);
+  pinMode(LED_GREEN,OUTPUT);
+  pinMode(LED_BLUE,OUTPUT);
+  pinMode(LED_YELLOW,OUTPUT);
+}
+if (H<10||T<10)
+{
+  cout<<"LOW HUMIDITY value\n";
+  void blink(int led,int msdelay);
+
+  digitalWrite(LED_GREEN, LOW);
+  digitalWrite(LED_YELLOW, LOW);
+  digitalWrite(LED_RED,HIGH);
+  digitalWrite(LED_BLUE,LOW);
+	
+  for (int i = 0; i < ; i++)
+  {buz.playTone(392, 100);
+  delay(100);
+  }
+}
+else
+{ 
+  cout<<"HIGH HUMIDITY";	
+  digitalWrite(LED_GREEN,HIGH );
+  digitalWrite(LED_YELLOW,LOW );
+  digitalWrite(LED_RED,LOW );
+  digitalWrite(LED_BLUE,LOW);
+  return 0;
+}
