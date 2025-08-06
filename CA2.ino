@@ -21,7 +21,7 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 
 
 TM1637 disp(CLK,DIO);
-double humi,t;
+double humi;
 
 DHT dht;
 
@@ -39,19 +39,14 @@ void loop() {
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
-  float t = dht.readTemperature();
 
   // check if returns are valid, if they are NaN (not a number) then something went wrong!
-  if (isnan(t) || isnan(h)) 
+  if ( isnan(h)) 
   {
     displayError();
   } 
   else{
-    displayTemperature((int8_t)t);//
-    delay(1000);
     displayHumidity((int8_t)h);//
-    Serial.print(t);
-    Serial.print(",");
     Serial.println(h);
     delay(1000);
   }
@@ -61,22 +56,6 @@ void loop() {
 /* Parameter: -int8_t temperature, temperature range is -40 ~ 125 degrees celsius */
 /* Return Value: void */
 
-void displayTemperature(int8_t temperature)
-{
-  int8_t temp[4];
-  if(temperature < 0)
-	{
-		temp[0] = INDEX_NEGATIVE_SIGN;
-		temperature = abs(temperature);
-	}
-	else if(temperature < 100)temp[0] = INDEX_BLANK;
-	else temp[0] = temperature/100;
-	temperature %= 100;
-	temp[1] = temperature / 10;
-	temp[2] = temperature % 10;
-	temp[3] = 12;	          //index of 'C' for celsius degree symbol.
-	disp.display(temp);
-}
 
 void displayHumidity(int8_t humi)
 {
@@ -91,7 +70,7 @@ void displayHumidity(int8_t humi)
 
   if (humi>70)
 {
-  Serial.println("LOW HUMIDITY value");
+  Serial.println("LOW HUMIDITY");
   void blink(int led,int msdelay);
 
   digitalWrite(LED_RED, HIGH);
@@ -107,7 +86,7 @@ void displayHumidity(int8_t humi)
 }
 else
 { 
-  Serial.println("HIGH HUMIDITY");	
+  Serial.println("NORMAL HUMIDITY");	
   digitalWrite(LED_RED,LOW );
   digitalWrite(LED_GREEN,HIGH );
   digitalWrite(LED_BLUE,LOW );
