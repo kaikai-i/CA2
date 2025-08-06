@@ -1,4 +1,4 @@
-// LAI SAM THUNG & ZHUANG KAILI //
+// LAI SAM THUNG & ZHUANG KAILI 
 // 2517720         2517689
 // DCEP/1A/04
 
@@ -84,21 +84,8 @@ void displayHumidity(int8_t humi)
   temp[2] = humi % 10;
   temp[3] = 18;	          //index of 'H' for celsius degree symbol.
   disp.display(temp);
-}
 
-void displayError()
-{
-  disp.display(3,14);//display "E"
-}
-
-void setUp()
-{
-  pinMode(LED_RED,OUTPUT);
-  pinMode(LED_GREEN,OUTPUT);
-  pinMode(LED_BLUE,OUTPUT);
-  pinMode(LED_YELLOW,OUTPUT);
-
-if (humi>40)
+  if (humi>40)
 {
   Serial.println("LOW HUMIDITY value");
   void blink(int led,int msdelay);
@@ -122,4 +109,17 @@ else
   digitalWrite(LED_YELLOW,LOW);
   return 0;
 }
+}
+
+void displayError()
+{
+  disp.display(3,14);//display "E"
+}
+
+void setUp()
+{
+  pinMode(LED_RED,OUTPUT);
+  pinMode(LED_GREEN,OUTPUT);
+  pinMode(LED_BLUE,OUTPUT);
+  pinMode(LED_YELLOW,OUTPUT);
 }
