@@ -140,3 +140,25 @@ void displayError()
   disp.display(3,14);//display "E"
 }
 
+#define BUTTONK1 8  //BUTTON K1 is connected to digital Pin 8 
+ 
+void setup() { 
+  
+pinMode(BUTTONK1,INPUT_PULLUP); // sets pin8 as input with INPUT_PULLUP mode. 
+ 
+ Serial.begin(9600);   // open serial port, set data rate to 9600 bps        
+} 
+ 
+void loop() { 
+ 
+  if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when pressed)  
+  { 
+     delay(300);                 // add a small delay to debounce the button 
+         
+     Serial.println("Button K1 is pressed");//send the string to Serial monitor 
+ 
+     while (digitalRead(BUTTONK1) == 0);/*Ensure the button is released (i.e. back to 
+logic 1) before executing the next statement */ 
+  }     
+}
+
