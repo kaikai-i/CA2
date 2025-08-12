@@ -25,12 +25,13 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 
 TM1637 disp(CLK,DIO);
 double humi;
-int knobValue=400;
+int knobValue;
 int Aread=400;
 
 DHT dht;
 
-void setup() {
+void setup() 
+{
 	disp.init();  
 	dht.begin();
   Serial.begin(9600);
@@ -39,19 +40,24 @@ void setup() {
   pinMode(LED_BLUE,OUTPUT);
   pinMode(LED_YELLOW,OUTPUT);
   pinMode(BUTTONK1,INPUT_PULLUP); 
+  Serial.begin(9600); 
 }
 
-void loop() {
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float h = dht.readHumidity();
+void displayError()
+{
+  disp.display(3,14);//display "E"
+  return 0;
+}
 
-  // check if returns are valid, if they are NaN (not a number) then something went wrong!
+void loop() 
+{
+  float h = dht.readHumidity();
   if ( isnan(h)) 
   {
     displayError();
   } 
-  else{
+  else
+  {
     displayHumidity((int8_t)h);//
     Serial.println(h);
     delay(1000);
@@ -99,27 +105,31 @@ else
   digitalWrite(LED_YELLOW,LOW);
   return 0;
 }
-if (knobValue=Aread)
+
 {
   knobValue=analogRead(KNOB_PIN);
-  Serial.print("Knob value ");
-  Serial.print("CORRECT ");
+  Serial.print("Knob value : ");
   Serial.println(knobValue);
   delay(500);
+  return 0;
+
+if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when pressed)  
+{ 
+     delay(300);                 // add a small delay to debounce the button 
+         
+     Serial.println("Button K1 is pressed");//send the string to Serial monitor 
+ 
+     while (digitalRead(BUTTONK1) == 0);
+       
+  if (knobValue>=Aread)
+ {
   digitalWrite(LED_RED,LOW );
   digitalWrite(LED_GREEN,LOW );
   digitalWrite(LED_BLUE,HIGH );
   digitalWrite(LED_YELLOW,LOW);
-
-  for (int knobValue=4000 ;; )
-  {  buz.playTone(392, 100);
-     delay(100);
-  }
-
-  return 0;
-}
-else
-{
+ }
+ else
+ {
   buz.playTone(392, 100);
   delay(100);
   Serial.print("Knob value ");
@@ -130,35 +140,7 @@ else
   digitalWrite(LED_GREEN,LOW );
   digitalWrite(LED_BLUE,LOW);
   digitalWrite(LED_YELLOW,HIGH);
-  
-  return 0;
-
+  }
 }
 }
-
-void displayError()
-{
-  disp.display(3,14);//display "E"
 }
-
- 
-void setup() { 
-  
-pinMode(BUTTONK1,INPUT_PULLUP); // sets pin8 as input with INPUT_PULLUP mode. 
- 
- Serial.begin(9600);   // open serial port, set data rate to 9600 bps        
-} 
- 
-void loop() { 
- 
-  if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when pressed)  
-  { 
-     delay(300);                 // add a small delay to debounce the button 
-         
-     Serial.println("Button K1 is pressed");//send the string to Serial monitor 
- 
-     while (digitalRead(BUTTONK1) == 0);/ 
-  }     
-	
-}
-
