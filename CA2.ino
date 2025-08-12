@@ -157,8 +157,8 @@ void loop() {
          
      Serial.println("Button K1 is pressed");//send the string to Serial monitor 
  
-     while (digitalRead(BUTTONK1) == 0);/*Ensure the button is released (i.e. back to 
-logic 1) before executing the next statement */ 
+     while (digitalRead(BUTTONK1) == 0);/ 
   }     
+	
 }
 
