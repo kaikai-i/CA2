@@ -20,6 +20,7 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 #define LED_YELLOW 7
 #define BUTTONK1 8 
 #define KNOB_PIN A0
+#define BUTTONK1 8  //BUTTON K1 is connected to digital Pin 8 
 
 
 TM1637 disp(CLK,DIO);
@@ -140,7 +141,6 @@ void displayError()
   disp.display(3,14);//display "E"
 }
 
-#define BUTTONK1 8  //BUTTON K1 is connected to digital Pin 8 
  
 void setup() { 
   
