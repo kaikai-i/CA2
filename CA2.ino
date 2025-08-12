@@ -18,10 +18,14 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 #define LED_GREEN 5
 #define LED_BLUE 6
 #define LED_YELLOW 7
+#define BUTTONK1 8 
+#define KNOB_PIN A0
 
 
 TM1637 disp(CLK,DIO);
 double humi;
+int knobValue=400;
+int Aread=400;
 
 DHT dht;
 
@@ -33,6 +37,7 @@ void setup() {
   pinMode(LED_GREEN,OUTPUT);
   pinMode(LED_BLUE,OUTPUT);
   pinMode(LED_YELLOW,OUTPUT);
+  pinMode(BUTTONK1,INPUT_PULLUP); 
 }
 
 void loop() {
@@ -93,9 +98,45 @@ else
   digitalWrite(LED_YELLOW,LOW);
   return 0;
 }
+if (knobValue=Aread)
+{
+  knobValue=analogRead(KNOB_PIN);
+  Serial.print("Knob value ");
+  Serial.print("CORRECT ");
+  Serial.println(knobValue);
+  delay(500);
+  digitalWrite(LED_RED,LOW );
+  digitalWrite(LED_GREEN,LOW );
+  digitalWrite(LED_BLUE,HIGH );
+  digitalWrite(LED_YELLOW,LOW);
+
+  for (int knobValue=4000 ;; )
+  {  buz.playTone(392, 100);
+     delay(100);
+  }
+
+  return 0;
+}
+else
+{
+  buz.playTone(392, 100);
+  delay(100);
+  Serial.print("Knob value ");
+  Serial.print("WRONG");
+  Serial.println(knobValue);
+  delay(500);
+  digitalWrite(LED_RED,LOW );
+  digitalWrite(LED_GREEN,LOW );
+  digitalWrite(LED_BLUE,LOW);
+  digitalWrite(LED_YELLOW,HIGH);
+  
+  return 0;
+
+}
 }
 
 void displayError()
 {
   disp.display(3,14);//display "E"
 }
+
