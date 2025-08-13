@@ -107,11 +107,11 @@ else
 }
 
 {
-  knobValue=analogRead(KNOB_PIN);
-  Serial.print("Knob value : ");
-  Serial.println(knobValue);
-  delay(500);
-  return 0;
+knobValue=analogRead(KNOB_PIN); //read value of the knob and assign it to the variable 
+Serial.print("Knob value : "); 
+Serial.println(knobValue); //print out the value of the knob to the Serial monitor 
+delay(500);  
+} 
 
 if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when pressed)  
 { 
@@ -141,6 +141,5 @@ if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when p
   digitalWrite(LED_BLUE,LOW);
   digitalWrite(LED_YELLOW,HIGH);
   }
-}
 }
 }
