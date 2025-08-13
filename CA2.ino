@@ -26,7 +26,9 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 TM1637 disp(CLK,DIO);
 double humi;
 int knobValue;
-int Aread=400;
+int tolerance=30;
+int targetValue=400;
+
 
 DHT dht;
 
@@ -106,40 +108,46 @@ else
   return 0;
 }
 
-{
 knobValue=analogRead(KNOB_PIN); //read value of the knob and assign it to the variable 
 Serial.print("Knob value : "); 
 Serial.println(knobValue); //print out the value of the knob to the Serial monitor 
 delay(500);  
-} 
+
+if (abs(knobValue - targetValue) <= tolerance) 
+    {
+      Serial.println("Knob in position! Press button to continue...");
+    }
 
 if (digitalRead(BUTTONK1) == 0) // check if button K1 is pressed (logic 0 when pressed)  
 { 
-     delay(300);                 // add a small delay to debounce the button 
+     delay(30);                 // add a small delay to debounce the button 
          
      Serial.println("Button K1 is pressed");//send the string to Serial monitor 
- 
-     while (digitalRead(BUTTONK1) == 0);
-       
-  if (knobValue>=Aread)
- {
-  digitalWrite(LED_RED,LOW );
-  digitalWrite(LED_GREEN,LOW );
-  digitalWrite(LED_BLUE,HIGH );
-  digitalWrite(LED_YELLOW,LOW);
- }
- else
- {
-  buz.playTone(392, 100);
-  delay(100);
-  Serial.print("Knob value ");
-  Serial.print("WRONG");
-  Serial.println(knobValue);
-  delay(500);
-  digitalWrite(LED_RED,LOW );
-  digitalWrite(LED_GREEN,LOW );
-  digitalWrite(LED_BLUE,LOW);
-  digitalWrite(LED_YELLOW,HIGH);
+     if (abs(knobValue - targetValue) <= tolerance) 
+    {
+      Serial.println("Knob in position! Press button to continue...");
+      digitalWrite(LED_RED,LOW );
+      digitalWrite(LED_GREEN,LOW );
+      digitalWrite(LED_BLUE,HIGH );
+      digitalWrite(LED_YELLOW,LOW);
+      delay(1000);
+
+    } 
+     else
+    {
+      buz.playTone(392, 100);
+      delay(100);
+      Serial.print("Knob value ");
+      Serial.print("WRONG");
+      Serial.println(knobValue);
+      delay(500);
+      digitalWrite(LED_RED,LOW );
+      digitalWrite(LED_GREEN,LOW );
+      digitalWrite(LED_BLUE,LOW);
+      digitalWrite(LED_YELLOW,HIGH);
+      delay(1000);
   }
-}
+     
+     while (digitalRead(BUTTONK1) == 0);
+ }
 }
