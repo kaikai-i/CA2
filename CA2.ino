@@ -25,6 +25,7 @@ PassiveBuzzer buz(PassiveBuzzerPin);
 
 TM1637 disp(CLK,DIO);
 double humi;
+double temperature;
 int knobValue;
 int tolerance=30;
 int targetValue=400;
@@ -54,12 +55,16 @@ void displayError()
 void loop() 
 {
   float h = dht.readHumidity();
-  if ( isnan(h)) 
+  float t = dht.readTemperature();
+  if ( isnan(h)|| isnan(h)) 
   {
     displayError();
   } 
   else
-  {
+  { displayTemperature((int8_t)t);
+    Serial.print("TEMPERATURE : ");
+    Serial.println(t);
+    delay(300);
     displayHumidity((int8_t)h);//
     Serial.println(h);
     delay(1000);
@@ -69,7 +74,25 @@ void loop()
 /* Function: Display temperature on 4-digit digital tube */
 /* Parameter: -int8_t temperature, temperature range is -40 ~ 125 degrees celsius */
 /* Return Value: void */
-
+void displayTemperature(int8_t temperature)
+{
+  int8_t temp[4];
+  if(temperature < 0)
+    {
+    temp[0] = INDEX_NEGATIVE_SIGN;
+    temperature = abs(temperature);
+    }
+  else{
+      if(temperature < 100)
+      temp[0] = INDEX_BLANK;
+      else temp[0] = temperature/100;
+      }
+temperature %= 100;
+temp[1] = temperature / 10;
+temp[2] = temperature % 10;
+temp[3] = 12;
+disp.display(temp);
+}
 
 void displayHumidity(int8_t humi)
 {
@@ -82,9 +105,10 @@ void displayHumidity(int8_t humi)
   temp[3] = 18;	          //index of 'H' for celsius degree symbol.
   disp.display(temp);
 
-  if (humi>70)
+  if (humi > 65 )
 {
-  Serial.println("LOW HUMIDITY");
+  Serial.println("LOW HUMIDITY : ");
+  Serial.println("temperature ");
   void blink(int led,int msdelay);
 
   digitalWrite(LED_RED, HIGH);
@@ -100,7 +124,7 @@ void displayHumidity(int8_t humi)
 }
 else
 { 
-  Serial.println("NORMAL HUMIDITY");	
+  Serial.println("NORMAL HUMIDITY : ");	
   digitalWrite(LED_RED,LOW );
   digitalWrite(LED_GREEN,HIGH );
   digitalWrite(LED_BLUE,LOW );
